@@ -29,5 +29,5 @@ module.exports = Header42 =
   insert: ->
     console.log 'Header42 was toggled!'
     textEditor = atom.workspace.getActiveTextEditor()
-    textEditorElement = atom.views.getView(textEditor)
-    textEditorElement.setAttribute("hasheader", true)
+    textEditor.markBufferPosition([0, 0], invalidate: 'never')
+    console.log(textEditor)
