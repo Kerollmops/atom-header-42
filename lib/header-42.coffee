@@ -19,7 +19,7 @@ module.exports = Header42 =
   activate: (state) ->
     atom.workspace.observeTextEditors (editor) =>
       editor.getBuffer().onWillSave =>
-        @update(editor.getBuffer())
+        @update(editor)
 
     # all informations filled
     @dateTimeFormat = "YYYY/MM/DD HH:mm:ss"
@@ -66,21 +66,29 @@ module.exports = Header42 =
       return fs.readFileSync(filename, encoding: "utf8")
     null
 
-  getHeader: (editor) ->
+  getHeader: (editor, updating) ->
     dirty_header = @getHeaderText(editor)
     filename = path.basename(editor.getPath())
-    created = sprintf(@timestamp, moment().format(@dateTimeFormat))
+    if updating == false
+      created = sprintf(@timestamp, moment().format(@dateTimeFormat))
+    else
+      created = "TODO: retieve old 'Created' info"
     updated = sprintf(@timestamp, moment().format(@dateTimeFormat))
     sprintf(dirty_header, filename, @byName, created, updated)
 
-  update: (buffer) ->
-    # console.log(buffer)
-    console.log sprintf(@timestamp, moment().format(@dateTimeFormat))
+  update: (editor) ->
+    buffer = editor.getBuffer()
+    lines = buffer.getLines()
+    header = @getHeader(editor, true)
+    header_lines = header.split(/\r\n|\r|\n/).length
+    if header != null
+      buffer.setTextInRange([[0, 0], [header_lines - 1, 0]], header,
+                            normalizeLineEndings: true)
 
   insert: (event) ->
     editor = atom.workspace.getActiveTextEditor()
+    header = @getHeader(editor, false)
     buffer = editor.getBuffer()
-    header = @getHeader(editor)
     if header != null
       buffer.insert([0, 0], header, normalizeLineEndings: true)
       buffer.save()
