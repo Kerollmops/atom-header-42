@@ -1,18 +1,20 @@
 {
   "name": "header-42",
   "main": "./lib/header-42",
-  "version": "0.0.0",
-  "description": "A short description of your package",
+  "version": "0.0.1",
+  "description": "Add the 42 header to your project files",
   "keywords": [
   ],
   "activationCommands": {
     "atom-workspace": "header-42:insert"
   },
-  "repository": "https://github.com/atom/header-42",
+  "repository": "https://github.com/Kerosene2000/atom-header-42",
   "license": "MIT",
   "engines": {
     "atom": ">=1.0.0 <2.0.0"
   },
   "dependencies": {
+     "sprintf-js": "1.0.3",
+     "moment": "2.10.6"
   }
 }

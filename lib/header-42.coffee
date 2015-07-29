@@ -1,15 +1,35 @@
 {CompositeDisposable} = require 'atom'
 fs = require 'fs'
 path = require 'path'
+util = require 'util'
+sprintf = require('sprintf-js').sprintf
+moment = require 'moment'
 
 module.exports = Header42 =
   subscriptions: null
+  notifManager: null
   insertTemplateStr: null
+
+  dateTimeFormat: null
+  login: null
+  mail: null
+  byName: null
+  timestamp: null
 
   activate: (state) ->
     atom.workspace.observeTextEditors (editor) =>
       editor.getBuffer().onWillSave =>
         @update(editor.getBuffer())
+
+    # all informations filled
+    @dateTimeFormat = "YYYY/MM/DD HH:mm:ss"
+    @login = process.env.USER ? "anonymous"
+    @mail = sprintf("%s@student.42.fr", @login)
+    @byName = sprintf("%s <%s>", @login, @mail)
+    @timestamp = sprintf("%s by %s", "%s", @login)
+
+    # inform user that the header 42 package has been activated
+    atom.notifications.addInfo(sprintf "Header activated for user %s", @login)
 
     # Events subscribed to in atom's system can be easily cleaned up
     # with a CompositeDisposable
@@ -22,7 +42,7 @@ module.exports = Header42 =
   deactivate: ->
     @subscriptions.dispose()
 
-  get_header_type: (basename) ->
+  getHeaderType: (basename) ->
     headers = [
         ['^(Makefile)$',                            'Makefile.header'],
         ['^.*\.(c|h|js|css|cs|scala|rs|go|swift)$', 'C.header'],
@@ -39,39 +59,28 @@ module.exports = Header42 =
         return path.join(__dirname, "headers", file)
     null
 
-  get_header_text: (editor) ->
+  getHeaderText: (editor) ->
     basename = path.basename(editor.getPath())
-    filename = @get_header_type(basename)
+    filename = @getHeaderType(basename)
     if filename != null
       return fs.readFileSync(filename, encoding: "utf8")
     null
 
-  get_header: (editor) ->
-    dirty_header = @get_header_text(editor)
-    index = 0
-    dirty_header.replace /%-(\d*)s/g, (match, p1) ->
-
-      # do it cleanestly !!!!
-      infos = [
-        path.basename(editor.getPath()), # filename
-      ]
-      if index < infos.length
-        text = infos[index]
-      else
-        text = ""
-      # !!!!!!!!!!!!
-
-      index++ # to know which text to add
-      len = parseInt(p1)
-      text.concat(Array((len - text.length) + 1).join(' '))
+  getHeader: (editor) ->
+    dirty_header = @getHeaderText(editor)
+    filename = path.basename(editor.getPath())
+    created = sprintf(@timestamp, moment().format(@dateTimeFormat))
+    updated = sprintf(@timestamp, moment().format(@dateTimeFormat))
+    sprintf(dirty_header, filename, @byName, created, updated)
 
   update: (buffer) ->
     # console.log(buffer)
+    console.log sprintf(@timestamp, moment().format(@dateTimeFormat))
 
   insert: (event) ->
     editor = atom.workspace.getActiveTextEditor()
     buffer = editor.getBuffer()
-    header = @get_header(editor)
+    header = @getHeader(editor)
     if header != null
       buffer.insert([0, 0], header, normalizeLineEndings: true)
       buffer.save()
