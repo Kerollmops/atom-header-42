@@ -4,10 +4,9 @@
   "version": "0.0.1",
   "description": "Add the 42 header to your project files",
   "keywords": [
+      "42",
+      "header"
   ],
-  "activationCommands": {
-    "atom-workspace": "header-42:insert"
-  },
   "repository": "https://github.com/Kerosene2000/atom-header-42",
   "license": "MIT",
   "engines": {
