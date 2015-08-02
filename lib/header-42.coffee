@@ -10,6 +10,7 @@ module.exports = Header42 =
   notifManager: null
   insertTemplateStr: null
 
+  blacklist: ["wandre", "agoomany"]
   dateTimeFormat: null
   login: null
   mail: null
@@ -17,19 +18,25 @@ module.exports = Header42 =
   timestampBy: null
 
   activate: (state) ->
-    atom.workspace.observeTextEditors (editor) =>
-      editor.getBuffer().onWillSave => @update(editor)
-
-    # Events subscribed to in atom's system can be easily cleaned up
-    # with a CompositeDisposable
-    @subscriptions = new CompositeDisposable
-
     # all informations fields
     @dateTimeFormat = "YYYY/MM/DD HH:mm:ss"
     @login = process.env.USER ? "anonymous"
     @mail = "%s@student.42.fr"
     @byName = "%s <%s>"
     @timestampBy = "%s by %s"
+
+    if @autorized(@login) == false
+      atom.notifications.addError(
+        sprintf "sorry, %s you are not authorized to use 42 header \
+          because I don't like you...", @login)
+      return
+
+    atom.workspace.observeTextEditors (editor) =>
+      editor.getBuffer().onWillSave => @update(editor)
+
+    # Events subscribed to in atom's system can be easily cleaned up
+    # with a CompositeDisposable
+    @subscriptions = new CompositeDisposable
 
     # Register command that toggles this view
     @subscriptions.add atom.commands.add 'atom-workspace',
@@ -56,6 +63,12 @@ module.exports = Header42 =
         return path.join(__dirname, "headers", file)
     null
 
+  # check autorized users
+  autorized: (login) ->
+    if login in @blacklist
+      return false
+    return true
+
   getHeaderText: (editor) ->
     basename = path.basename(editor.getPath())
     filename = @getHeaderType(basename)
@@ -73,6 +86,9 @@ module.exports = Header42 =
       created = sprintf(@timestampBy, moment().format(@dateTimeFormat), login)
     else
       login = createInfo[1]
+      if @autorized(login) == false
+        atom.notifications.addWarning(
+          sprintf "%s is someone I don't like !", login)
       created = sprintf(@timestampBy, createInfo[0], login)
     byName = sprintf(@byName, @login, sprintf(@mail, @login))
     updated = sprintf(@timestampBy, moment().format(@dateTimeFormat), @login)
