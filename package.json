@@ -1,11 +1,11 @@
 {
   "name": "header-42",
   "main": "./lib/header-42",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Add the 42 header to your project files",
   "keywords": [
-      "42",
-      "header"
+    "42",
+    "header"
   ],
   "repository": "https://github.com/Kerosene2000/atom-header-42",
   "license": "MIT",
@@ -13,7 +13,7 @@
     "atom": ">=1.0.0 <2.0.0"
   },
   "dependencies": {
-     "sprintf-js": "1.0.3",
-     "moment": "2.10.6"
+    "sprintf-js": "1.0.3",
+    "moment": "2.10.6"
   }
 }
