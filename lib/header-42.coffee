@@ -74,7 +74,7 @@ module.exports = Header42 =
     else
       login = createInfo[1]
       created = sprintf(@timestampBy, createInfo[0], login)
-    byName = sprintf(@byName, login, sprintf(@mail, login))
+    byName = sprintf(@byName, @login, sprintf(@mail, @login))
     updated = sprintf(@timestampBy, moment().format(@dateTimeFormat), @login)
 
     sprintf(dirty_header, filename, byName, created, updated)
