@@ -25,7 +25,7 @@ module.exports = Header42 =
     @byName = "%s <%s>"
     @timestampBy = "%s by %s"
 
-    if @autorized(@login) == false
+    if @authorized(@login) == false
       atom.notifications.addError(
         sprintf "sorry, %s you are not authorized to use 42 header \
           because I don't like you...", @login)
@@ -63,10 +63,11 @@ module.exports = Header42 =
         return path.join(__dirname, "headers", file)
     null
 
-  # check autorized users
-  autorized: (login) ->
-    if login in @blacklist
-      return false
+  # check authorized users
+  authorized: (login) ->
+    login = login.replace /^\s+|\s+$/g, ""
+    for l in @blacklist
+      return false if l == login
     return true
 
   getHeaderText: (editor) ->
@@ -86,7 +87,7 @@ module.exports = Header42 =
       created = sprintf(@timestampBy, moment().format(@dateTimeFormat), login)
     else
       login = createInfo[1]
-      if @autorized(login) == false
+      if @authorized(login) == false
         atom.notifications.addWarning(
           sprintf "%s is someone I don't like !", login)
       created = sprintf(@timestampBy, createInfo[0], login)
