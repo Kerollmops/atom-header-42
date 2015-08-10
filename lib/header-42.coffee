@@ -47,14 +47,14 @@ module.exports = Header42 =
 
   getHeaderType: (basename) ->
     headers = [
-        ['^(Makefile)$',                                'Makefile.header'],
-        ['^.*\.(c|cpp|h|js|css|cs|scala|rs|go|swift)$', 'C.header'],
-        ['^.*\.(php)$',                                 'Php.header'],
-        ['^.*\.(html)$',                                'Html.header'],
-        ['^.*\.(lua)$',                                 'Lua.header'],
-        ['^.*\.(ml|mli)$',                              'OCaml.header'],
-        ['^.*\.(hs)$',                                  'Haskell.header'],
-        ['^.*\.(s|s64|asm|hs|h64|inc)$',                'ASM.header']
+        ['^(Makefile)$',                                    'Makefile.header'],
+        ['^.*\.(c|cpp|h|hpp|js|css|cs|scala|rs|go|swift)$', 'C.header'],
+        ['^.*\.(php)$',                                     'Php.header'],
+        ['^.*\.(html)$',                                    'Html.header'],
+        ['^.*\.(lua)$',                                     'Lua.header'],
+        ['^.*\.(ml|mli)$',                                  'OCaml.header'],
+        ['^.*\.(hs)$',                                      'Haskell.header'],
+        ['^.*\.(s|s64|asm|hs|h64|inc)$',                    'ASM.header']
     ]
 
     for [regex, file] in headers
