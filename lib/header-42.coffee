@@ -6,13 +6,18 @@ sprintf = require('sprintf-js').sprintf
 moment = require 'moment'
 
 module.exports = Header42 =
+  config:
+    login:
+      type: 'string'
+      default: (process.env.USER ? "anonymous")
+      description: 'You can use another login in the header (empty is USER).'
+
   subscriptions: null
   notifManager: null
   insertTemplateStr: null
 
   blacklist: ["wandre", "agoomany"]
   dateTimeFormat: null
-  login: null
   mail: null
   byName: null
   timestampBy: null
@@ -20,10 +25,16 @@ module.exports = Header42 =
   activate: (state) ->
     # all informations fields
     @dateTimeFormat = "YYYY/MM/DD HH:mm:ss"
-    @login = process.env.USER ? "anonymous"
     @mail = "%s@student.42.fr"
     @byName = "%s <%s>"
     @timestampBy = "%s by %s"
+
+    # Events subscribed to in atom's system can be easily cleaned up
+    # with a CompositeDisposable
+    @subscriptions = new CompositeDisposable
+
+    @subscriptions.add atom.config.observe 'header-42.login', (login) =>
+      @login = login
 
     if @authorized(@login) == false
       atom.notifications.addError(
@@ -34,9 +45,6 @@ module.exports = Header42 =
     atom.workspace.observeTextEditors (editor) =>
       editor.getBuffer().onWillSave => @update(editor)
 
-    # Events subscribed to in atom's system can be easily cleaned up
-    # with a CompositeDisposable
-    @subscriptions = new CompositeDisposable
 
     # Register command that toggles this view
     @subscriptions.add atom.commands.add 'atom-workspace',
