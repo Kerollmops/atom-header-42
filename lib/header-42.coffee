@@ -10,7 +10,7 @@ module.exports = Header42 =
     login:
       type: 'string'
       default: (process.env.USER ? "anonymous")
-      description: 'You can use another login in the header (empty is USER).'
+      description: 'You can use another login in the header.'
 
   subscriptions: null
   notifManager: null
