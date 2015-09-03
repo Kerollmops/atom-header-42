@@ -1,4 +1,4 @@
-## 0.1.3 - First Release
+## 0.2.1 - Custom Login
 * Added custom login setting
 
 ## 0.1.0 - First Release
