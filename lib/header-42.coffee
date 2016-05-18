@@ -44,7 +44,7 @@ module.exports = Header42 =
   getHeaderType: (basename) ->
     headers = [
         ['^(Makefile)$',                                    'Makefile.header'],
-        ['^.*\.(sh)$',										'Makefile.header'],
+        ['^.*\.(sh)$',                                      'Makefile.header'],
         ['^.*\.(c|cpp|h|hpp|js|css|cs|scala|rs|go|swift)$', 'C.header'],
         ['^.*\.(php)$',                                     'Php.header'],
         ['^.*\.(html)$',                                    'Html.header'],
@@ -74,10 +74,11 @@ module.exports = Header42 =
     if createInfo == null
       login = @login
       created = sprintf(@timestampBy, moment().format(@dateTimeFormat), login)
+      byName = sprintf(@byName, login, sprintf(@mail, login))
     else
       login = createInfo[1]
       created = sprintf(@timestampBy, createInfo[0], login)
-    byName = sprintf(@byName, @login, sprintf(@mail, @login))
+      byName = sprintf(@byName, login, sprintf(@mail, login))
     updated = sprintf(@timestampBy, moment().format(@dateTimeFormat), @login)
 
     sprintf(dirty_header, filename, byName, created, updated)
@@ -95,7 +96,6 @@ module.exports = Header42 =
   update: (editor) ->
     if matches = @hasHeader(editor.getBuffer().getText())
       buffer = editor.getBuffer()
-      lines = buffer.getLines()
       header = @getHeader(editor, matches)
       header_lines = header.split(/\r\n|\r|\n/).length
       if header != null
