@@ -1,7 +1,7 @@
 {
   "name": "header-42",
   "main": "./lib/header-42",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Add the 42 header to your project files",
   "keywords": [
     "42",
