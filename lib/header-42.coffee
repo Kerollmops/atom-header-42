@@ -5,6 +5,8 @@ util = require 'util'
 sprintf = require('sprintf-js').sprintf
 moment = require 'moment'
 
+String::rstrip = -> @replace /\s+$/g, ""
+
 module.exports = Header42 =
   config:
     login:
@@ -74,11 +76,10 @@ module.exports = Header42 =
     if createInfo == null
       login = @login
       created = sprintf(@timestampBy, moment().format(@dateTimeFormat), login)
-      byName = sprintf(@byName, login, sprintf(@mail, login))
     else
       login = createInfo[1]
       created = sprintf(@timestampBy, createInfo[0], login)
-      byName = sprintf(@byName, login, sprintf(@mail, login))
+    byName = sprintf(@byName, login, sprintf(@mail, login))
     updated = sprintf(@timestampBy, moment().format(@dateTimeFormat), @login)
 
     sprintf(dirty_header, filename, byName, created, updated)
@@ -90,7 +91,7 @@ module.exports = Header42 =
 
     if buffer.match byPat && buffer.match updatedPat
       if matches = buffer.match createdPat
-        return [matches[1], matches[2]]
+        return [matches[1].rstrip(), matches[2].rstrip()]
     return (null)
 
   update: (editor) ->
