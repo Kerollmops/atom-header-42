@@ -46,10 +46,10 @@ module.exports = Header42 =
   getHeaderType: (basename) ->
     headers = [
         ['^(Makefile)$',                                    'Makefile.header'],
-        ['^.*\.(sh)$',                                      'Makefile.header'],
+        ['^.*\.(sh)$',										'Makefile.header'],
+        ['^.*\.(html|ejs)$',                                'Html.header'],
         ['^.*\.(c|cpp|h|hpp|js|css|cs|scala|rs|go|swift)$', 'C.header'],
         ['^.*\.(php)$',                                     'Php.header'],
-        ['^.*\.(html)$',                                    'Html.header'],
         ['^.*\.(lua)$',                                     'Lua.header'],
         ['^.*\.(ml|mli)$',                                  'OCaml.header'],
         ['^.*\.(hs)$',                                      'Haskell.header'],
