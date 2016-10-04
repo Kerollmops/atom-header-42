@@ -47,7 +47,7 @@ module.exports = Header42 =
     headers = [
         ['^(Makefile)$',                                    'Makefile.header'],
         ['^.*\.(sh)$',										'Makefile.header'],
-        ['^.*\.(html|ejs)$',                                'Html.header'],
+        ['^.*\.(html|ejs)$',                              	'Html.header'],
         ['^.*\.(c|cpp|h|hpp|js|css|cs|scala|rs|go|swift)$', 'C.header'],
         ['^.*\.(php)$',                                     'Php.header'],
         ['^.*\.(lua)$',                                     'Lua.header'],
