@@ -95,7 +95,7 @@ module.exports = Header42 =
     return (null)
 
   update: (editor) ->
-    if matches = @hasHeader(editor.getBuffer().getText())
+    if editor.isMoified() && matches = @hasHeader(editor.getBuffer().getText())
       buffer = editor.getBuffer()
       header = @getHeader(editor, matches)
       header_lines = header.split(/\r\n|\r|\n/).length
