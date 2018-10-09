@@ -19,7 +19,7 @@ module.exports = Header42 =
   insertTemplateStr: null
 
   dateTimeFormat: "YYYY/MM/DD HH:mm:ss"
-  mail: "%s@student.42.fr"
+  mail: "%s@student.s19.be"
   byName: "%s \<%s\>"
   timestampBy: "%s by %s"
 
@@ -85,7 +85,7 @@ module.exports = Header42 =
     sprintf(dirty_header, filename, byName, created, updated)
 
   hasHeader: (buffer) ->
-    byPat = /By: .{1,8} <.{1,8}@student\.42\.fr>/
+    byPat = /By: .{1,8} <.{1,8}@student\.s19\.be>/
     updatedPat = /Updated: \d{4}\/\d{2}\/\d{2} \d{2}:\d{2}:\d{2} by .{1,8}/
     createdPat = /Created: (\d{4}\/\d{2}\/\d{2} \d{2}:\d{2}:\d{2}) by (.{1,8})/
 
@@ -95,7 +95,7 @@ module.exports = Header42 =
     return (null)
 
   update: (editor) ->
-    if matches = @hasHeader(editor.getBuffer().getText())
+    if editor.isMoified() && matches = @hasHeader(editor.getBuffer().getText())
       buffer = editor.getBuffer()
       header = @getHeader(editor, matches)
       header_lines = header.split(/\r\n|\r|\n/).length
